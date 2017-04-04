@@ -45,8 +45,6 @@ def calculateMode(list):
         #Check if there are more than one mode
         for keyValue in d.keys():
             if d[keyValue]==frequencyOfMode and ("Mode: "+ str(keyValue),"Frequency: "+str(d[keyValue])) not in modes:
-                print keyValue
-                print d[keyValue]
                 modes.append(("Mode: " + str(keyValue), "Frequency: " + str(d[keyValue])))
 
 
