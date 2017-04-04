@@ -14,7 +14,7 @@ def calculateCombinations(list):
 
 
 def calculateAverage(list):
-    return (list/len(list));
+    return (sum(list)/len(list));
 
 
 def calculateMode(list):
