@@ -3,6 +3,7 @@
 #Author: Hidalgo Pomales
 
 import itertools
+import math
 
 def calculatePermutations(list):
     return itertools.permutations(list)
@@ -14,7 +15,7 @@ def calculateCombinations(list):
 
 
 def calculateAverage(list):
-    return (sum(list)/len(list));
+    return float((sum(list)/len(list)));
 
 
 def calculateMode(list):
@@ -157,5 +158,28 @@ def calculateComplement(list1, list2):
                         tempList.append(element2)
     return tempList
 
+
+
+def calculateVariance(list):
+
+    # Calculate the mean or average of the list
+    mean = calculateAverage(list)
+    sum =0
+
+    # For each element of the list substract to the number the mean and square the result
+    for element in list:
+        number = pow((element-mean),2)
+        sum += number
+
+    return (float(sum)/len(list))
+
+
+def calculateStandardDeviation(list):
+
+    # Calculate the variance.
+    variance = calculateVariance(list)
+
+    # Get the square root, and present only 4 decimal places.
+    return format(math.sqrt(variance),'.4f')
 
 
