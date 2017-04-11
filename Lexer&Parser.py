@@ -26,7 +26,7 @@ reserved = {
 tokens = [
              'LIST', 'ID', 'NUMBER',
              'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS',
-             'LPAREN', 'RPAREN'
+             'LPAREN', 'RPAREN', 'COMMA'
          ] + list(reserved.values())
 
 # Simple Regular Expressions
@@ -37,6 +37,7 @@ t_DIVIDE = r'/'
 t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_COMMA = r'\,'
 
 
 # List Regular Expression
@@ -145,6 +146,49 @@ def p_statement_median(t):
     numbers = list(map(int, numbers))
     try:
         print("Median: ", Utils.calculateMedian(numbers))
+
+    except ValueError:
+        print("Enter numbers!")
+
+def p_statement_union(t):
+    'statement : UNION LPAREN LIST COMMA LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    numbers2 =t[5][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    # Convert the list into an actual list of ints
+    numbers2 = list(map(int, numbers2))
+    try:
+        print("UNION: ", Utils.calculateUnion(numbers,numbers2))
+
+    except ValueError:
+        print("Enter numbers!")
+
+def p_statement_intersection(t):
+    'statement : INTER LPAREN LIST COMMA LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    numbers2 =t[5][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    # Convert the list into an actual list of ints
+    numbers2 = list(map(int, numbers2))
+    try:
+        print("Intersection: ", Utils.calculateIntersection(numbers,numbers2))
+
+    except ValueError:
+        print("Enter numbers!")
+
+
+def p_statement_complement(t):
+    'statement : COMPLEM LPAREN LIST COMMA LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    numbers2 =t[5][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    # Convert the list into an actual list of ints
+    numbers2 = list(map(int, numbers2))
+    try:
+        print("Complement: ", Utils.calculateComplement(numbers,numbers2))
 
     except ValueError:
         print("Enter numbers!")
