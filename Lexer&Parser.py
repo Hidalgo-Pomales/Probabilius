@@ -24,7 +24,7 @@ reserved = {
 
 # Tokens
 tokens = [
-             'LIST', 'ID', 'NUMBER',
+             'LIST', 'LISTCHAR','ID', 'NUMBER',
              'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS',
              'LPAREN', 'RPAREN', 'COMMA'
          ] + list(reserved.values())
@@ -44,6 +44,12 @@ t_COMMA = r'\,'
 def t_LIST(t):
     r'[(][-?0-9][,-?0-9]*[)]'
     t.type = 'LIST'
+    return t
+
+# List Regular Expression
+def t_LIST2(t):
+    r'[(][\'a-zA-z\'][,\'a-zA-Z\']*[)]'
+    t.type = 'LISTCHAR'
     return t
 
 
@@ -106,6 +112,18 @@ def p_statement_average(t):
         print("Enter numbers!")
 
 
+def p_statement_permuCHAR(t):
+    'statement : PERMU LPAREN LISTCHAR RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of string without the ""
+    tempList=[]
+    for x in numbers:
+        tempList.append(str(x).replace("\'",""))
+    try:
+        print("Permutations: ", (Utils.calculatePermutations(tempList)))
+    except ValueError:
+        print("Enter numbers!")
+
 def p_statement_permu(t):
     'statement : PERMU LPAREN LIST RPAREN'
     numbers = t[3][1:-1].split(',')
@@ -117,6 +135,7 @@ def p_statement_permu(t):
     except ValueError:
         print("Enter numbers!")
 
+
 def p_statement_combi(t):
     'statement : COMBI LPAREN LIST RPAREN'
     numbers = t[3][1:-1].split(',')
@@ -125,6 +144,18 @@ def p_statement_combi(t):
     try:
         print("Combinations: ", Utils.calculateCombinations(numbers))
 
+    except ValueError:
+        print("Enter numbers!")
+
+def p_statement_combiCHAR(t):
+    'statement : COMBI LPAREN LISTCHAR RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of string without the ""
+    tempList=[]
+    for x in numbers:
+        tempList.append(str(x).replace("\'",""))
+    try:
+        print("Combinations: ", (Utils.calculateCombinations(tempList)))
     except ValueError:
         print("Enter numbers!")
 
