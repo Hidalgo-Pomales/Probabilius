@@ -1,188 +1,159 @@
-# This program will calculate simple probability and statistics operations
+# -----------------------------------------------------------------------------
+# probabilius.py
+#
+# Probabilius is a programing language to solve basic probability 
+# and statistics problems.
+# -----------------------------------------------------------------------------
 
-#Author: Hidalgo Pomales
+#Reserved Words
+reserved = {
+   'avg' : 'AVG'
+}
 
-import itertools
-import math
+#Tokens
+tokens = [
+    'LIST','ID','NUMBER',
+    'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
+    'LPAREN','RPAREN'
+    ] + list(reserved.values())
 
-def calculatePermutations(list1):
-    return list(itertools.permutations(list1))
+#Simple Regular Expressions
+t_PLUS    = r'\+'
+t_MINUS   = r'-'
+t_TIMES   = r'\*'
+t_DIVIDE  = r'/'
+t_EQUALS  = r'='
+t_LPAREN  = r'\('
+t_RPAREN  = r'\)'
 
+#List Regular Expression
+def t_LIST(t):
+    r'[(][-?0-9][,-?0-9]*[)]'
+    t.type = 'LIST'
+    return t
 
+#
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')    # Check for reserved words
+    return t
 
-def calculateCombinations(list1):
-    tempList=[]
-    for i in range(1, len(list1) + 1):
-       tempList=tempList+ (list(itertools.combinations(list1, i)))
-    return tempList
+def t_NUMBER(t):
+    r'\d+'
+    try:
+        t.value = int(t.value)
+    except ValueError:
+        print("Integer value too large %d", t.value)
+        t.value = 0
+    return t
 
-def calculateAverage(list):
-    return float((sum(list)/len(list)))
+# Ignored characters
+t_ignore = " \t"
 
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count("\n")
+    
+def t_error(t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+    
+# Build the lexer
+import ply.lex as lex
+lexer = lex.lex()
 
+# Parsing rules
 
-def calculateMode(list):
-        d={}
+precedence = (
+    ('left','PLUS','MINUS'),
+    ('left','TIMES','DIVIDE'),
+    ('right','UMINUS'),
+    )
 
-        # Store the list in a dictionary, if already exists add one to the frequency
-        # [ valueOfMode (key) : frequencyOfMode (value) ]
-        for i in list:
-             try:
-                 d[i]+=1
-             except:
-                 d[i]=1
+# dictionary of names
+names = { }
 
-        valueOfMode= 0
-        frequencyOfMode= 0
+def p_statement_average(t):
+    'statement : AVG LPAREN LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    sum = 0
+    try:
+        for x in numbers:
+            sum = sum + float(x)
+    except ValueError:
+        print("Enter numbers!")
 
-        # Iterates through the keys to find the biggest value
-        # Store the valueOfMode (key) and frequencyOfMode (value)
-        modes=[]
-        for key in d.keys():
-            if d[key] > frequencyOfMode:
-                valueOfMode = key
-                frequencyOfMode =d[key]
+    print(sum/len(numbers))
 
-        # Append the mode
-        modes.append(("Mode: "+ str(valueOfMode),"Frequency: "+str(frequencyOfMode)))
+def p_statement_name(t):
+    'statement : AVG LPAREN ID RPAREN'
+    print(t[3])
+    print(names[t[3]][1:-1].split(","))
+    numbers = names[t[3]][1:-1].split(",")
+    sum = 0
+    try:
+        for x in numbers:
+            sum = sum + float(x)
+    except ValueError:
+        print("Enter numbers!")
 
-        #Check if there are more than one mode
-        for keyValue in d.keys():
-            if d[keyValue]==frequencyOfMode and ("Mode: "+ str(keyValue),"Frequency: "+str(d[keyValue])) not in modes:
-                modes.append(("Mode: " + str(keyValue), "Frequency: " + str(d[keyValue])))
+    print(sum/len(numbers))
 
+def p_statement_assign(t):
+    'statement : ID EQUALS expression'
+    names[t[1]] = t[3]
 
-        return modes
+    for x in t:
+        print(x)
+    print(names)
 
+def p_statement_expr(t):
+    'statement : expression'
+    print(t[1])
 
+def p_expression_binop(t):
+    '''expression : expression PLUS expression
+                  | expression MINUS expression
+                  | expression TIMES expression
+                  | expression DIVIDE expression'''
+    if t[2] == '+'  : t[0] = t[1] + t[3]
+    elif t[2] == '-': t[0] = t[1] - t[3]
+    elif t[2] == '*': t[0] = t[1] * t[3]
+    elif t[2] == '/': t[0] = t[1] / t[3]
 
-def calculateMedian(list):
-    sortedList= sorted(list)
-    listLength =len(list)
-    midIndex =(listLength-1)//2
+def p_expression_uminus(t):
+    'expression : MINUS expression %prec UMINUS'
+    t[0] = -t[2]
 
-    # If the list is empty, then there is no median
-    if( listLength< 1):
-        return None
+def p_expression_group(t):
+    'expression : LPAREN expression RPAREN'
+    t[0] = t[2]
 
-    # If the length of the list is odd, then return the number in the middle
-    if(listLength % 2==1):
-        return sortedList[midIndex]
+def p_expression_list(t):
+    'expression : LIST'
+    t[0] = t[1]
 
-    # If the length of the list even, then return the average of the numbers in the middle
-    else:
-        return((sortedList[midIndex]+sortedList[midIndex+1])/2.0)
+def p_expression_number(t):
+    'expression : NUMBER'
+    t[0] = t[1]
 
+def p_expression_name(t):
+    'expression : ID'
+    try:
+        t[0] = names[t[1]]
+    except LookupError:
+        print("Undefined name '%s'" % t[1])
+        t[0] = 0
 
-def calculateUnion(list1,list2):
-    tempList = []
+def p_error(t):
+    print("Syntax error at '%s'" % t.value)
 
-    # Find which one is the bigger list
-    if (len(list1) < len(list2)):
-        short = list1
-        bigger = list2
-    else:
-        short = list2
-        bigger = list1
+import ply.yacc as yacc
+parser = yacc.yacc()
 
-    # Iterate through the small one
-    for element in short:
-        tempList.append(element)
-
-    # Iterate through the bigger one and add items that doesnt exist in the list
-    for element in bigger:
-        if element not in tempList:
-            tempList.append(element)
-
-    return tempList
-
-
-def calculateIntersection(list1,list2):
-
-    tempList =[]
-
-    # If they have the same length, there we can iterate using just one loop
-    if (len(list1) == len(list2)):
-        for element in list1 and list2:
-            if element in list1 and list2:
-                tempList.append(element)
-
-    # If not, then we need to find the bigger one to avoid exceptions
-    else:
-         if len(list1) > len(list2):
-             bigger= list1
-             smaller = list2
-         else:
-            bigger=list2
-            smaller = list1
-
-    # Since the intersections needs to be in both of the list we just go through the smaller one
-    # because everything after the size of the smaller one, can not be an intersection.
-         for element in smaller:
-             if element in bigger:
-                 if element not in tempList:
-                    tempList.append(element)
-    return tempList
-
-
-def calculateComplement(list1, list2):
-    tempList = []
-
-    # If they have the same length, there we can iterate using just one loop
-    if (len(list1) == len(list2)):
-        for element,element2 in zip(list1,list2):
-                if element not in list2 and element2 not in list1:
-                    if element not in tempList:
-                        tempList.append(element)
-                    if element2 not in tempList:
-                        tempList.append(element2)
-
-
-    # If not, then we need to find the bigger one to avoid exceptions
-    else:
-        if len(list1) > len(list2):
-            bigger = list1
-            smaller = list2
-        else:
-            bigger = list2
-            smaller = list1
-
-        # Since the complements needs to be in one list and not in the other, we go through the smaller one
-        # first to avoid exceptions.
-        for element in smaller:
-            if element not in bigger:
-                if element not in tempList:
-                    tempList.append(element)
-
-        # Add the rest of the items that are not in the smaller one.
-        for element2 in bigger:
-                if element2 not in smaller:
-                    if element2 not in tempList:
-                        tempList.append(element2)
-    return tempList
-
-
-
-def calculateVariance(list):
-
-    # Calculate the mean or average of the list
-    mean = calculateAverage(list)
-    sum =0
-
-    # For each element of the list substract to the number the mean and square the result
-    for element in list:
-        number = pow((element-mean),2)
-        sum += number
-
-    return (float(sum)/len(list))
-
-
-def calculateStandardDeviation(list):
-
-    # Calculate the variance.
-    variance = calculateVariance(list)
-
-    # Get the square root, and present only 4 decimal places.
-    return format(math.sqrt(variance),'.4f')
-
-
+while True:
+    try:
+        s = input('Probabilius > ')   # Use raw_input on Python 2
+    except EOFError:
+        break
+    parser.parse(s)
