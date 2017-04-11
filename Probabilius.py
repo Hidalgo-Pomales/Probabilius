@@ -5,17 +5,20 @@
 import itertools
 import math
 
-def calculatePermutations(list):
-    return itertools.permutations(list)
+def calculatePermutations(list1):
+    return list(itertools.permutations(list1))
 
 
 
-def calculateCombinations(list):
-    return itertools.combinations
-
+def calculateCombinations(list1):
+    tempList=[]
+    for i in range(1, len(list1) + 1):
+       tempList=tempList+ (list(itertools.combinations(list1, i)))
+    return tempList
 
 def calculateAverage(list):
-    return float((sum(list)/len(list)));
+    return float((sum(list)/len(list)))
+
 
 
 def calculateMode(list):
@@ -56,7 +59,7 @@ def calculateMode(list):
 def calculateMedian(list):
     sortedList= sorted(list)
     listLength =len(list)
-    midIndex =(listLength-1)/2
+    midIndex =(listLength-1)//2
 
     # If the list is empty, then there is no median
     if( listLength< 1):
