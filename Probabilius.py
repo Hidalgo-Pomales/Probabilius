@@ -15,6 +15,7 @@ reserved = {
     'combi': 'COMBI',
     'mode' : 'MODE',
     'median':'MEDIAN',
+    'trim':'TRIM',
     'union': 'UNION',
     'inter': 'INTER',
     'complem': "COMPLEM",
@@ -177,6 +178,17 @@ def p_statement_median(t):
     numbers = list(map(int, numbers))
     try:
         print("Median: ", Utils.calculateMedian(numbers))
+
+    except ValueError:
+        print("Enter numbers!")
+
+def p_statement_trimmedmean(t):
+    'statement : TRIM LPAREN LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    try:
+        print("Trimmed Mean: ", Utils.calculateTrimmedMead(numbers))
 
     except ValueError:
         print("Enter numbers!")
