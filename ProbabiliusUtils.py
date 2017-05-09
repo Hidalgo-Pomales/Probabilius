@@ -184,3 +184,40 @@ def calculateStandardDeviation(list):
 
     # Get the square root, and present only 4 decimal places.
     return format(math.sqrt(variance),'.4f')
+
+def calculateTrimmedMean(list):
+
+    #Sort the list.
+    sortedList = sorted(list)[1:-1]
+
+    # get the trimmed mean
+    return sum(sortedList) / len(sortedList)
+
+
+def CalculateMax(list):
+    max = list[0]
+    #iterate to find the max number
+    for i in list[1:]:
+        if i > max:
+            max = i
+    #return the max number
+    return max
+
+
+def CalculateMin(list):
+    min = list[0]
+
+    #iterate to find the min
+    for i in list[1:]:
+        if i < min:
+            min = i
+    # return the min
+    return min
+
+def CalculateRange(list):
+        #use the max and min functions
+	    return CalculateMax(list) - CalculateMin(list)
+
+def CalculateProbabilities(number1,number2):
+    x = max(randint(1,number1) for _ in range(number1+2))
+    return x;
