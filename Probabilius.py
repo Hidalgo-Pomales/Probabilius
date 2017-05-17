@@ -46,7 +46,7 @@ t_COMMA = r'\,'
 
 # List Regular Expression
 def t_LIST(t):
-    r'[(][-?0-9][,-?0-9]*[)]'
+    r'[(][-?0-9,]+[-?0-9][)]'
     t.type = 'LIST'
     return t
 
@@ -140,10 +140,9 @@ def p_statement_permu(t):
         print("Enter numbers!")
 
 def p_statement_cirper(t):
-    'statement : CIRPER LPAREN LIST RPAREN'
-    numbers = t[3][1:-1].split(',')
+    'statement : CIRPER LPAREN NUMBER RPAREN'
+    numbers = t[3]
     # Convert the list into an actual list of ints
-    numbers = list(map(int, numbers))
     try:
         print("Number Circular Permutations: ", Utils.calculateCircularPermutations(numbers))
 

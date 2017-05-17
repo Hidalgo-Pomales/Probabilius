@@ -20,8 +20,8 @@ def calculatePermutations(list1):
 #         resultList.append(tuple)
 #     return resultList
 
-def calculateCircularPermutations(list1):
-    return math.factorial(list1.pop() - 1)
+def calculateCircularPermutations(number):
+    return math.factorial(number - 1)
 
 def calculatePartialPermutations(list1):
     return math.factorial(list1[0])/math.factorial(list1[0] - list1[1])
