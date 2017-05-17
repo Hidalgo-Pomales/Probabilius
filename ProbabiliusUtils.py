@@ -4,11 +4,27 @@
 
 import itertools
 import math
+from collections import deque
 
 def calculatePermutations(list1):
     return list(itertools.permutations(list1))
 
+# def calculateCircularPermutations(list1):
+#     normalPerm = calculatePermutations(list1[:len(list1)-1])
+#     resultList = []
+#     for item in normalPerm:
+#         tuple = []
+#         for i in range(0, len(item)):
+#             tuple.append(item[i])
+#         tuple.append(len(list1))
+#         resultList.append(tuple)
+#     return resultList
 
+def calculateCircularPermutations(list1):
+    return math.factorial(list1.pop() - 1)
+
+def calculatePartialPermutations(list1):
+    return math.factorial(list1[0])/math.factorial(list1[0] - list1[1])
 
 def calculateCombinations(list1):
     tempList=[]
@@ -16,9 +32,12 @@ def calculateCombinations(list1):
        tempList=tempList+ (list(itertools.combinations(list1, i)))
     return tempList
 
+def rotate(list1, n):
+    return list1[n:] + list1[:n]
+
+
 def calculateAverage(list):
     return float((sum(list)/len(list)))
-
 
 
 def calculateMode(list):

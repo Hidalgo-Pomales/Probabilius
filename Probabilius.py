@@ -20,7 +20,10 @@ reserved = {
     'inter': 'INTER',
     'complem': "COMPLEM",
     'varian': 'VARIAN',
-    'stddev': "STDDEV"
+    'stddev': "STDDEV",
+    'cirper': 'CIRPER',
+    'partial': 'PARTIAL',
+    'range': 'RANGE'
 }
 
 # Tokens
@@ -136,6 +139,16 @@ def p_statement_permu(t):
     except ValueError:
         print("Enter numbers!")
 
+def p_statement_cirper(t):
+    'statement : CIRPER LPAREN LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    try:
+        print("Number Circular Permutations: ", Utils.calculateCircularPermutations(numbers))
+
+    except ValueError:
+        print("Enter numbers!")
 
 def p_statement_combi(t):
     'statement : COMBI LPAREN LIST RPAREN'
@@ -317,6 +330,25 @@ def p_expression_name(t):
 def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
+def p_statement_partial(t):
+    'statement : PARTIAL LPAREN LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    try:
+        print("Number Partial Permutations: ", Utils.calculatePartialPermutations(numbers))
+    except ValueError:
+        print("Enter n followed by k")
+
+def p_statement_range(t):
+    'statement : RANGE LPAREN LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    try:
+        print("Range: ", Utils.CalculateRange(numbers))
+    except ValueError:
+        print("Enter numbers!")
 
 import ply.yacc as yacc
 
