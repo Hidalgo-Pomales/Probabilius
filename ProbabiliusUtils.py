@@ -9,16 +9,8 @@ from collections import deque
 def calculatePermutations(list1):
     return list(itertools.permutations(list1))
 
-# def calculateCircularPermutations(list1):
-#     normalPerm = calculatePermutations(list1[:len(list1)-1])
-#     resultList = []
-#     for item in normalPerm:
-#         tuple = []
-#         for i in range(0, len(item)):
-#             tuple.append(item[i])
-#         tuple.append(len(list1))
-#         resultList.append(tuple)
-#     return resultList
+def calculateNumberOfPermutations(number):
+    return math.factorial(number)
 
 def calculateCircularPermutations(number):
     return math.factorial(number - 1)
@@ -31,6 +23,9 @@ def calculateCombinations(list1):
     for i in range(1, len(list1) + 1):
        tempList=tempList+ (list(itertools.combinations(list1, i)))
     return tempList
+
+def calculateNumberOfCombinations(list1):
+    return math.factorial(list1[0])/(math.factorial(list1[0] - list1[1]) * math.factorial(list1[1]))
 
 def rotate(list1, n):
     return list1[n:] + list1[:n]
@@ -204,10 +199,13 @@ def calculateStandardDeviation(list):
     # Get the square root, and present only 4 decimal places.
     return format(math.sqrt(variance),'.4f')
 
-def calculateTrimmedMean(list):
+def calculateTrimmedMean(percent, list1):
+
+    percent = percent/100
+    numberToRemove = math.floor(percent * len(list1))
 
     #Sort the list.
-    sortedList = sorted(list)[1:-1]
+    sortedList = sorted(list1)[numberToRemove:-numberToRemove]
 
     # get the trimmed mean
     return sum(sortedList) / len(sortedList)

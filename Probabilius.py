@@ -18,12 +18,14 @@ reserved = {
     'trim':'TRIM',
     'union': 'UNION',
     'inter': 'INTER',
-    'complem': "COMPLEM",
+    'complem': 'COMPLEM',
     'varian': 'VARIAN',
-    'stddev': "STDDEV",
+    'stddev': 'STDDEV',
     'cirper': 'CIRPER',
     'partial': 'PARTIAL',
-    'range': 'RANGE'
+    'range': 'RANGE',
+    'totalPer': 'TOTALPER',
+    'combination': 'COMBINATION'
 }
 
 # Tokens
@@ -139,6 +141,16 @@ def p_statement_permu(t):
     except ValueError:
         print("Enter numbers!")
 
+def p_statement_totalPer(t):
+    'statement : TOTALPER LPAREN NUMBER RPAREN'
+    number = t[3]
+
+    try:
+        print("Permutations: ", Utils.calculateNumberOfPermutations(number))
+
+    except ValueError:
+        print("Enter numbers!")
+
 def p_statement_cirper(t):
     'statement : CIRPER LPAREN NUMBER RPAREN'
     numbers = t[3]
@@ -172,6 +184,16 @@ def p_statement_combiCHAR(t):
     except ValueError:
         print("Enter numbers!")
 
+def p_statement_combination(t):
+    'statement : COMBINATION LPAREN LIST RPAREN'
+    numbers = t[3][1:-1].split(',')
+    # Convert the list into an actual list of ints
+    numbers = list(map(int, numbers))
+    try:
+        print("Combinations: ", Utils.calculateNumberOfCombinations(numbers))
+    except ValueError:
+        print("Enter n followed by k")
+
 def p_statement_mode(t):
     'statement : MODE LPAREN LIST RPAREN'
     numbers = t[3][1:-1].split(',')
@@ -195,12 +217,13 @@ def p_statement_median(t):
         print("Enter numbers!")
 
 def p_statement_trimmedmean(t):
-    'statement : TRIM LPAREN LIST RPAREN'
-    numbers = t[3][1:-1].split(',')
+    'statement : TRIM LPAREN NUMBER COMMA LIST RPAREN'
+    percent = t[3]
+    numbers = t[5][1:-1].split(',')
     # Convert the list into an actual list of ints
     numbers = list(map(int, numbers))
     try:
-        print("Trimmed Mean: ", Utils.calculateTrimmedMead(numbers))
+        print("Trimmed Mean: ", Utils.calculateTrimmedMean(percent, numbers))
 
     except ValueError:
         print("Enter numbers!")
