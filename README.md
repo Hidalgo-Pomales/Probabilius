@@ -104,12 +104,12 @@ Probalius > 120
 ```
 Partial Permutations:
 ```javascript
-Probalius > partial(2,5)
+Probalius > partial((2,5))
 Result: 20
 ```
 Combinations:
 ```javascript
-Probalius > combination(10,2)
+Probalius > combination((10,2))
 Result: 
 Probalius > 45
 ```
