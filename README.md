@@ -92,13 +92,13 @@ Probalius > (7, 8, 9)
 ```
 Total Permutations:
 ```javascript
-Probalius > totalPer(10,2)
+Probalius > totalPer(10)
 Result:
 Probalius > 90
 ```
 Circular Permutations:
 ```javascript
-Probalius >  cirPer(6,1)
+Probalius >  cirPer(6)
 Result:
 Probalius > 120
 ```
