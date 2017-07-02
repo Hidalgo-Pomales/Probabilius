@@ -17,11 +17,11 @@ reserved = {
     'median':'MEDIAN',
     'trim':'TRIM',
     'union': 'UNION',
-    'inter': 'INTER',
-    'complem': 'COMPLEM',
-    'varian': 'VARIAN',
-    'stddev': 'STDDEV',
-    'cirper': 'CIRPER',
+    'intersection': 'INTERSECTION',
+    'comp': 'COMPLEM',
+    'var': 'VAR',
+    'stanDev': 'STANDEV',
+    'cirPer': 'CIRPER',
     'partial': 'PARTIAL',
     'range': 'RANGE',
     'totalPer': 'TOTALPER',
@@ -243,7 +243,7 @@ def p_statement_union(t):
         print("Enter numbers!")
 
 def p_statement_intersection(t):
-    'statement : INTER LPAREN LIST COMMA LIST RPAREN'
+    'statement : INTERSECTION LPAREN LIST COMMA LIST RPAREN'
     numbers = t[3][1:-1].split(',')
     numbers2 =t[5][1:-1].split(',')
     # Convert the list into an actual list of ints
@@ -272,7 +272,7 @@ def p_statement_complement(t):
         print("Enter numbers!")
 
 def p_statement_varian(t):
-    'statement : VARIAN LPAREN LIST RPAREN'
+    'statement : VAR LPAREN LIST RPAREN'
     numbers = t[3][1:-1].split(',')
     # Convert the list into an actual list of ints
     numbers = list(map(int, numbers))
@@ -282,7 +282,7 @@ def p_statement_varian(t):
         print("Enter numbers!")
 
 def p_statement_stddev(t):
-    'statement : STDDEV LPAREN LIST RPAREN'
+    'statement : STANDEV LPAREN LIST RPAREN'
     numbers = t[3][1:-1].split(',')
     # Convert the list into an actual list of ints
     numbers = list(map(int, numbers))
